@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinaria</title>
+    <link rel="icon" href="img/icono.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container-all-all">
+        <div class="barra-izquierda"></div>
+        <div class="container-all">
+            <header>
+                <div class="patitas">
+                </div>
+            </header>
+            <div class="container" id="container">
+                <h1 class="titulo">Veterinaria Paws & Care</h1>
+                <div class="container-citas">
+                    <button type="button" onclick="crear()" style="margin: 20px 0px;" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" class="btn btn-info">Agendar Cita ➕</button>
+
+                    <h2 class="administrar">Administra tus citas</h2>
+
+                </div>
+            </div>
+            <div id="checkboxes" class="checkboxes">
+                <label for=""><input type="checkbox" id="todas" class="checkbox" name="check" value="Todas">Todas
+                    🟡</label>
+                <label for=""><input type="checkbox" id="anuladas" class="checkbox" name="check"
+                        value="Anulada">Anuladas ⚪</label>
+                <label for=""><input type="checkbox" id="abierta" class="checkbox" name="check" value="Activo">Activas
+                    🟢</label>
+                <label for=""><input type="checkbox" id="anuladas" class="checkbox" name="check"
+                        value="Cerrada">Cerradas 🔴</label>
+            </div>
+            <div class="container-card" id="container-card">
+            </div>
+        </div>
+        <div class="barra-derecha"></div>
+    </div>
+    <footer>
+        <h3>Contactanos</h3>
+        <div class="redes-container">
+            <a href="#" class="facebook"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="#" class="twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="phone"><i class="fa-solid fa-phone"></i></a>
+
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-3" id="exampleModalLabel">Agenda tu cita</h1>
+                    <button type="button" onclick="limpiar()" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div id="error" class="error"></div>
+                <div class="modal-body">
+                    <div class="espacios">
+                        <label for="mascota">Mascota:</label><br>
+                        <label for="propietario">Propietario:</label><br>
+                        <label for="telefono">Telefono:</label><br>
+                        <label for="Fecha">Fecha:</label><br>
+                        <label for="hora">Hora:</label><br>
+                        <label for="tipo">Tipo:</label><br>
+                        <label for="sintomas" id="sintomasLabel">Sintomas:</label><br>
+                    </div>
+                    <div class="descripcion">
+                        <input type="text" id="mascota"><br>
+                        <input type="text" id="propietario"><br>
+                        <input type="number" pattern="[0-9]+" id="telefono"><br>
+                        <input type="date" id="fecha"><br>
+                        <input type="time" id="hora" min="08:00" max="20:00"><br>
+                        <select name="tipo" id="tipo"><br>
+                            <option value="null" disabled selected>Tipo de mascota</option>
+                            <option value="Perro">Perro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Vaca">Vaca</option>
+                            <option value="Serpiente">Serpiente</option>
+                            <option value="Hamster">Hamster</option>
+                            <option value="Canario">Canario</option>
+                            <option value="Cobaya">Cobaya</option>
+                            <option value="Pez">Pez</option>
+                            <option value="Conejo">Conejo</option>
+                        </select><br>
+                        <textarea id="sintomas" rows="2" cols="30"></textarea>
+                    </div>
+                </div>
+
+                <div id="registrado" class="registrado"></div>
+                <div class="modal-footer">
+                    <div class="gif">
+                        <img src="img/perrito.gif" alt="">
+                    </div>
+                    <button onclick="limpiar()" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cerrar</button>
+                    <button onclick="guardar()" type="button" class="btn btn-primary" id="btn-all">Agendar 💾</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</body>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+        pintar();
+        let checkboxes = document.querySelectorAll('.checkbox');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                filtrarCitas();
+            });
+        });
+    });
+
+    //Pintar cards
+    function pintar() {
+        const containerCard = document.getElementById("container-card");
+        containerCard.innerHTML = "";
+        let fragment = document.createDocumentFragment();
+        data.forEach((d, i) => {
+
+
+            for (let i = 0; i < animals.length; i++) {
+                if (animals[i].nombre === d.tipo) {
+                    imagen = animals[i].img;
+                    break;
+                }
+            }
+
+            let card = document.createElement("div");
+            card.classList.add("card");
+            // Face Front
+            let faceFront = document.createElement("div");
+            faceFront.classList.add("face", "front");
+            let img = document.createElement("img");
+            img.id = "imagenAnimal"
+            img.src = imagen;
+            img.alt = "";
+            let h3 = document.createElement("h3");
+            h3.id = "nombreAnimal";
+            h3.textContent = d.mascota;
+            faceFront.appendChild(img);
+            faceFront.appendChild(h3);
+            card.appendChild(faceFront);
+
+            // Face Back
+            let faceBack = document.createElement("div");
+            faceBack.classList.add("face", "back");
+            faceBack.classList.add(getColorClassByEstado(d.estado));
+            let h3Nombre = document.createElement("h3");
+            h3Nombre.id = "nombreAnimalTwo";
+            h3Nombre.textContent = d.mascota;
+
+            // Div Info
+            let info = document.createElement("div");
+            info.classList.add("info");
+
+            // Propietario
+            let containerPropietario = document.createElement("div");
+            containerPropietario.id = "container-propietario"; // Utilizamos el ID correcto
+            let propietario = document.createElement("p");
+            propietario.classList.add("negrita");
+            propietario.textContent = "Propietario:";
+            let nombrePropietario = document.createElement("p");
+            nombrePropietario.id = "nombrePropietario";
+            nombrePropietario.textContent = d.propietario;
+            containerPropietario.appendChild(propietario);
+            containerPropietario.appendChild(nombrePropietario);
+            info.appendChild(containerPropietario);
+
+            // Numero
+            let containerNumero = document.createElement("div");
+            containerNumero.id = "container-numero"; // Utilizamos el ID correcto
+            let numero = document.createElement("p");
+            numero.classList.add("negrita");
+            numero.textContent = "Telefono:";
+            let numeroSelect = document.createElement("p");
+            numeroSelect.id = "numeroTelefono";
+            numeroSelect.textContent = d.telefono;
+            containerNumero.appendChild(numero);
+            containerNumero.appendChild(numeroSelect);
+            info.appendChild(containerNumero);
+
+            // Fecha
+            let containerFecha = document.createElement("div");
+            containerFecha.id = "container-fecha"; // Utilizamos el ID correcto
+            let fecha = document.createElement("p");
+            fecha.classList.add("negrita");
+            fecha.textContent = "Fecha:";
+            let fechaSelect = document.createElement("p");
+            fechaSelect.id = "fechaSeleccionada";
+            fechaSelect.textContent = d.fecha;
+            containerFecha.appendChild(fecha);
+            containerFecha.appendChild(fechaSelect);
+            info.appendChild(containerFecha);
+
+            // Hora
+            let containerHora = document.createElement("div");
+            containerHora.id = "container-hora"; // Utilizamos el ID correcto
+            let hora = document.createElement("p");
+            hora.classList.add("negrita");
+            hora.textContent = "Hora:";
+            let horaSelect = document.createElement("p");
+            horaSelect.id = "horaSeleccionada";
+            horaSelect.textContent = d.hora;
+            containerHora.appendChild(hora);
+            containerHora.appendChild(horaSelect);
+            info.appendChild(containerHora);
+
+            // Tipo
+
+            let containerTipo = document.createElement("div");
+            containerTipo.id = "container-tipo";
+            let tipo = document.createElement("p");
+            tipo.classList.add("negrita");
+            tipo.textContent = "Tipo:";
+            let tipoSelect = document.createElement("p");
+            tipoSelect.id = "tipoAnimal";
+            tipoSelect.textContent = d.tipo;
+            containerTipo.appendChild(tipo);
+            containerTipo.appendChild(tipoSelect);
+            info.appendChild(containerTipo);
+
+            // Sintomas
+            let containerSintomas = document.createElement("div");
+            containerSintomas.id = "container-sintomas"; // Utilizamos el ID correcto
+            let sintomas = document.createElement("p");
+            sintomas.classList.add("negrita");
+            sintomas.textContent = "Sintomas:";
+            let sintomasSelect = document.createElement("p");
+            sintomasSelect.id = "sintomasAnimal";
+            sintomasSelect.textContent = d.sintomas;
+            containerSintomas.appendChild(sintomas);
+            containerSintomas.appendChild(sintomasSelect);
+            info.appendChild(containerSintomas);
+
+            // Botones
+            let botones = document.createElement("div");
+            botones.classList.add("link");
+            let btnEditar = document.createElement("button");
+            btnEditar.classList.add("btn", "btn-primary");
+            btnEditar.textContent = "Editar ✍️";
+            btnEditar.setAttribute("data-bs-toggle", "modal")
+            btnEditar.setAttribute("backgroundColor", "blue")
+            btnEditar.setAttribute("data-bs-target", "#exampleModal")
+            btnEditar.addEventListener("click", () => {
+                editar(d)
+            });
+
+            // Select Estado
+            let selectEstado = document.createElement("select");
+            selectEstado.id = "estado";
+            selectEstado.classList.add("estado");
+            selectEstado.dataset.id = d.id;
+            selectEstado.addEventListener("change", function () {
+                const newEstado = this.value;
+                const citaId = this.dataset.id;
+                cambiarEstado(citaId, newEstado);
+            });
+
+            // Opcion Activo
+            opcionActivo = document.createElement("option");
+            opcionActivo.id = "activo";
+            opcionActivo.value = "Activo";
+            opcionActivo.textContent = "Activo";
+            if (d.estado === "Activo") {
+                opcionActivo.selected = true; // Establecer como seleccionada si el estado coincide
+            }
+
+            // Opcion Anulada
+            opcionAnulada = document.createElement("option");
+            opcionAnulada.id = "anulada";
+            opcionAnulada.value = "Anulada";
+            opcionAnulada.textContent = "Anulada";
+            if (d.estado === "Anulada") {
+                opcionAnulada.selected = true; // Establecer como seleccionada si el estado coincide
+            }
+
+            // Opcion Cerrada
+            opcionCerrada = document.createElement("option");
+            opcionCerrada.id = "cerrada";
+            opcionCerrada.value = "Cerrada";
+            opcionCerrada.textContent = "Cerrada";
+            if (d.estado === "Cerrada") {
+                opcionCerrada.selected = true; // Establecer como seleccionada si el estado coincide
+            }
+
+
+            botones.appendChild(btnEditar);
+            selectEstado.appendChild(opcionActivo);
+            selectEstado.appendChild(opcionAnulada);
+            selectEstado.appendChild(opcionCerrada);
+            botones.appendChild(selectEstado)
+            faceBack.appendChild(h3Nombre);
+            faceBack.appendChild(info);
+            faceBack.appendChild(botones);
+            card.appendChild(faceBack);
+            fragment.appendChild(card);
+        });
+
+        containerCard.appendChild(fragment);
+    }
+
+    //Filtrar citas
+    function filtrarCitas() {
+        // Obtener el estado seleccionado en los checkboxes
+        let estadoSeleccionado = null;
+        let checkboxes = document.querySelectorAll('.checkbox');
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                estadoSeleccionado = checkbox.value;
+            }
+        });
+
+        // Filtrar las citas según el estado seleccionado
+        let citasFiltradas = [];
+        if (estadoSeleccionado === "Todas") {
+            citasFiltradas = data;
+        } else {
+            citasFiltradas = data.filter((cita) => cita.estado === estadoSeleccionado);
+        }
+
+        // Mostrar las citas filtradas
+        const containerCard = document.getElementById("container-card");
+        containerCard.innerHTML = "";
+
+        let fragment = document.createDocumentFragment();
+        citasFiltradas.forEach((d, i) => {
+            for (let i = 0; i < animals.length; i++) {
+                if (animals[i].nombre === d.tipo) {
+                    imagen = animals[i].img;
+                    break;
+                }
+            }
+
+            let card = document.createElement("div");
+            card.classList.add("card");
+            // Face Front
+            let faceFront = document.createElement("div");
+            faceFront.classList.add("face", "front");
+            let img = document.createElement("img");
+            img.id = "imagenAnimal"
+            img.src = imagen;
+            img.alt = "";
+            let h3 = document.createElement("h3");
+            h3.id = "nombreAnimal";
+            h3.textContent = d.mascota;
+            faceFront.appendChild(img);
+            faceFront.appendChild(h3);
+            card.appendChild(faceFront);
+
+            // Face Back
+            let faceBack = document.createElement("div");
+            faceBack.classList.add("face", "back");
+            faceBack.classList.add(getColorClassByEstado(d.estado));
+            let h3Nombre = document.createElement("h3");
+            h3Nombre.id = "nombreAnimalTwo";
+            h3Nombre.textContent = d.mascota;
+
+            // Div Info
+            let info = document.createElement("div");
+            info.classList.add("info");
+
+            // Propietario
+            let containerPropietario = document.createElement("div");
+            containerPropietario.id = "container-propietario"; // Utilizamos el ID correcto
+            let propietario = document.createElement("p");
+            propietario.classList.add("negrita");
+            propietario.textContent = "Propietario:";
+            let nombrePropietario = document.createElement("p");
+            nombrePropietario.id = "nombrePropietario";
+            nombrePropietario.textContent = d.propietario;
+            containerPropietario.appendChild(propietario);
+            containerPropietario.appendChild(nombrePropietario);
+            info.appendChild(containerPropietario);
+
+            // Numero
+            let containerNumero = document.createElement("div");
+            containerNumero.id = "container-numero"; // Utilizamos el ID correcto
+            let numero = document.createElement("p");
+            numero.classList.add("negrita");
+            numero.textContent = "Telefono:";
+            let numeroSelect = document.createElement("p");
+            numeroSelect.id = "numeroTelefono";
+            numeroSelect.textContent = d.telefono;
+            containerNumero.appendChild(numero);
+            containerNumero.appendChild(numeroSelect);
+            info.appendChild(containerNumero);
+
+            // Fecha
+            let containerFecha = document.createElement("div");
+            containerFecha.id = "container-fecha"; // Utilizamos el ID correcto
+            let fecha = document.createElement("p");
+            fecha.classList.add("negrita");
+            fecha.textContent = "Fecha:";
+            let fechaSelect = document.createElement("p");
+            fechaSelect.id = "fechaSeleccionada";
+            fechaSelect.textContent = d.fecha;
+            containerFecha.appendChild(fecha);
+            containerFecha.appendChild(fechaSelect);
+            info.appendChild(containerFecha);
+
+            // Hora
+            let containerHora = document.createElement("div");
+            containerHora.id = "container-hora"; // Utilizamos el ID correcto
+            let hora = document.createElement("p");
+            hora.classList.add("negrita");
+            hora.textContent = "Hora:";
+            let horaSelect = document.createElement("p");
+            horaSelect.id = "horaSeleccionada";
+            horaSelect.textContent = d.hora;
+            containerHora.appendChild(hora);
+            containerHora.appendChild(horaSelect);
+            info.appendChild(containerHora);
+
+            // Tipo
+
+            let containerTipo = document.createElement("div");
+            containerTipo.id = "container-tipo";
+            let tipo = document.createElement("p");
+            tipo.classList.add("negrita");
+            tipo.textContent = "Tipo:";
+            let tipoSelect = document.createElement("p");
+            tipoSelect.id = "tipoAnimal";
+            tipoSelect.textContent = d.tipo;
+            containerTipo.appendChild(tipo);
+            containerTipo.appendChild(tipoSelect);
+            info.appendChild(containerTipo);
+
+            // Sintomas
+            let containerSintomas = document.createElement("div");
+            containerSintomas.id = "container-sintomas"; // Utilizamos el ID correcto
+            let sintomas = document.createElement("p");
+            sintomas.classList.add("negrita");
+            sintomas.textContent = "Sintomas:";
+            let sintomasSelect = document.createElement("p");
+            sintomasSelect.id = "sintomasAnimal";
+            sintomasSelect.textContent = d.sintomas;
+            containerSintomas.appendChild(sintomas);
+            containerSintomas.appendChild(sintomasSelect);
+            info.appendChild(containerSintomas);
+
+            // Botones
+            let botones = document.createElement("div");
+            botones.classList.add("link");
+            let btnEditar = document.createElement("button");
+            btnEditar.classList.add("btn", "btn-primary");
+            btnEditar.textContent = "Editar ✍️";
+            btnEditar.setAttribute("data-bs-toggle", "modal")
+            btnEditar.setAttribute("backgroundColor", "blue")
+            btnEditar.setAttribute("data-bs-target", "#exampleModal")
+            btnEditar.addEventListener("click", () => {
+                editar(d)
+            });
+            // Select Estado
+            let selectEstado = document.createElement("select");
+            selectEstado.id = "estado";
+            selectEstado.classList.add("estado");
+            selectEstado.dataset.id = d.id;
+            selectEstado.addEventListener("change", function () {
+                const newEstado = this.value;
+                const citaId = this.dataset.id;
+                cambiarEstado(citaId, newEstado);
+            });
+
+            // Opcion Activo
+            opcionActivo = document.createElement("option");
+            opcionActivo.id = "activo";
+            opcionActivo.value = "Activo";
+            opcionActivo.textContent = "Activo";
+            if (d.estado === "Activo") {
+                opcionActivo.selected = true; // Establecer como seleccionada si el estado coincide
+            }
+
+            // Opcion Anulada
+            opcionAnulada = document.createElement("option");
+            opcionAnulada.id = "anulada";
+            opcionAnulada.value = "Anulada";
+            opcionAnulada.textContent = "Anulada";
+            if (d.estado === "Anulada") {
+                opcionAnulada.selected = true; // Establecer como seleccionada si el estado coincide
+            }
+
+            // Opcion Cerrada
+            opcionCerrada = document.createElement("option");
+            opcionCerrada.id = "cerrada";
+            opcionCerrada.value = "Cerrada";
+            opcionCerrada.textContent = "Cerrada";
+            if (d.estado === "Cerrada") {
+                opcionCerrada.selected = true; // Establecer como seleccionada si el estado coincide
+            }
+
+
+            botones.appendChild(btnEditar);
+            selectEstado.appendChild(opcionActivo);
+            selectEstado.appendChild(opcionAnulada);
+            selectEstado.appendChild(opcionCerrada);
+            botones.appendChild(selectEstado)
+            faceBack.appendChild(h3Nombre);
+            faceBack.appendChild(info);
+            faceBack.appendChild(botones);
+            card.appendChild(faceBack);
+            fragment.appendChild(card);
+        });
+        containerCard.appendChild(fragment);
+    };
+
+    //Cambiar Estado  en el array
+    function cambiarEstado(citaId, newEstado) {
+        // Buscar la cita correspondiente y actualizar el estado
+        const cita = data.find((c) => c.id === parseInt(citaId));
+        if (cita) {
+            cita.estado = newEstado;
+            pintar(); // Vuelve a pintar las tarjetas para actualizar el estado visualmente
+        }
+    }
+    //Datos
+    let data = [
+        {
+            id: c = 1,
+            mascota: "Pencho",
+            propietario: "Gonzalo",
+            telefono: 3222820671,
+            fecha: "2023-12-12",
+            hora: "12:00",
+            tipo: "Perro",
+            sintomas: "No se puede parar",
+            estado: "Activo"
+        },
+        {
+            id: 2,
+            mascota: "Michi",
+            propietario: "Gonzalo",
+            telefono: 3222820671,
+            fecha: "2023-12-12",
+            hora: "12:00",
+            tipo: "Gato",
+            sintomas: "No se puede parar",
+            estado: "Anulada"
+        },
+        {
+            id: 3,
+            mascota: "Zzzzz",
+            propietario: "Gonzalo",
+            telefono: 3222820671,
+            fecha: "2023-12-12",
+            hora: "12:00",
+            tipo: "Serpiente",
+            sintomas: "No se puede parar",
+            estado: "Activo"
+        },
+        {
+            id: 4,
+            mascota: "Pola",
+            propietario: "Gonzalo",
+            telefono: 3222820671,
+            fecha: "2023-12-12",
+            hora: "12:00",
+            tipo: "Canario",
+            sintomas: "No se puede parar",
+            estado: "Cerrada"
+        },
+    ]
+    //Imagenes
+    let animals = [
+        { nombre: "Perro", img: "img/perro.jpg" },
+        { nombre: "Gato", img: "img/gato.jpg" },
+        { nombre: "Vaca", img: "img/vaca.jpg" },
+        { nombre: "Serpiente", img: "img/serpiente.jpg" },
+        { nombre: "Hamster", img: "img/hamster.webp" },
+        { nombre: "Canario", img: "img/canario.jpeg" },
+        { nombre: "Cobaya", img: "img/cobaya.jpg" },
+        { nombre: "Pez", img: "img/pez.jpg" },
+        { nombre: "Conejo", img: "img/conejo.jpg" },
+    ]
+
+    let bd = null
+    let id = null
+
+    //Cambiar color del card segun el estado
+    function getColorClassByEstado(estado) {
+        switch (estado) {
+            case "Activo":
+                return "bg-success"; // Verde para citas activas
+            case "Cerrada":
+                return "bg-danger"; // Rojo para citas cerradas
+            case "Anulada":
+                return "bg-secondary"; // Gris para citas suspendidas (o el color que desees)
+            default:
+                return ""; // Si el estado no coincide con los anteriores, no se agrega ninguna clase
+        }
+    }
+
+    //Agregar datos
+    function agregar() {
+
+        if (document.getElementById("btn-all").textContent !== "Agendar 💾") {
+            document.getElementById("btn-all").textContent = "Agendar 💾";
+            if (document.getElementById("btn-all").textContent == "Agendar 💾") {
+                if (bd !== 0) {
+                    bd = 0;
+                }
+            }
+        }
+        console.log(data);
+
+        limpiar();
+    }
+    //Editar datos
+    function editar(r) {
+        // Cambiar el texto del botón a "Guardar cambios" solo si no ha sido cambiado antes
+        if (document.getElementById("btn-all").textContent !== "Guardar cambios 💾") {
+            document.getElementById("btn-all").textContent = "Guardar cambios 💾";
+            if (document.getElementById("btn-all").textContent == "Guardar cambios 💾") {
+                bd = 1;
+                id = r.id;
+                document.getElementById("mascota").value = r.mascota;
+                document.getElementById("propietario").value = r.propietario;
+                document.getElementById("telefono").value = r.telefono;
+                document.getElementById("fecha").value = r.fecha;
+                document.getElementById("hora").value = r.hora;
+                document.getElementById("tipo").value = r.tipo;
+                document.getElementById("sintomas").value = r.sintomas;
+            }
+        }
+
+    }
+    //Guardar datos en data 
+    function guardar() {
+        if (validar() == true) {
+
+            if (bd == 1) {
+                // Actualizar cita existente
+                data.forEach((e) => {
+                    if (e.id == id) {
+                        e.mascota = document.getElementById("mascota").value;
+                        e.propietario = document.getElementById("propietario").value;
+                        e.telefono = document.getElementById("telefono").value;
+                        e.fecha = document.getElementById("fecha").value;
+                        e.hora = document.getElementById("hora").value;
+                        e.tipo = document.getElementById("tipo").value;
+                        e.sintomas = document.getElementById("sintomas").value;
+                        // e.estado = r.estado
+                        document.getElementById("btn-all").textContent = "Agendar";
+                    }
+                    bd = 0
+                    document.getElementById("btn-all").textContent = "Agendar 💾";
+
+                });
+            } else {
+                // Agregar nueva cita
+                // let estado = document.getElementById("estado").value
+                document.getElementById("btn-all").textContent = "Agendar 💾"
+                data.push({
+                    id: data.length + 1,
+                    mascota: document.getElementById("mascota").value,
+                    propietario: document.getElementById("propietario").value,
+                    telefono: document.getElementById("telefono").value,
+                    fecha: document.getElementById("fecha").value,
+                    hora: document.getElementById("hora").value,
+                    tipo: document.getElementById("tipo").value,
+                    sintomas: document.getElementById("sintomas").value,
+                    estado: "Activo"
+                });
+                console.log(data);
+            }
+            document.getElementById("btn-all").textContent = "Agendar 💾";
+
+            document.getElementById("container-card").innerHTML = "";
+            pintar();
+            limpiar();
+            cerrarModal();
+        }
+    }
+
+    let error = ""
+    var fechaActual = new Date().toISOString().split('T')[0];
+    var horaInput = document.getElementById("hora").value;
+    var horaServicioInicio = "08:00";
+    var horaServicioFin = "20:00";
+
+    //Validaciones
+    function validar() {
+        if (document.getElementById("mascota").value.trim() === "") {
+            error = "<label for='error'>Por favor escribe el nombre de tu mascota</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        } else if (document.getElementById("propietario").value.trim() === "") {
+            error = "<label for='error'>Digite el nombre del propietario</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        }
+        else if (document.getElementById("telefono").value.trim() === "") {
+            error = "<label for='error'>Digite el telefono</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        } else if (document.getElementById("telefono").value.length != 10) {
+            error = "<label for='error'>El telefono tiene que tener 10 digitos</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        } else if (document.getElementById("fecha").value.trim() === "") {
+            error = "<label for='error'>Por favor establezca una fecha</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        } else if (document.getElementById("fecha").value <= fechaActual) {
+            error = "<label for='error'>La fecha debe ser mayor a la fecha actual</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        } else if (document.getElementById("hora").value.trim() === "") {
+            error = "<label for='error'>Establesca una hora</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        } else if (validarHora() == false) {
+            error = "<label for='error'>La hora seleccionada está fuera del rango de servicio (8:00 AM - 8:00 PM)</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        } else if (document.getElementById("tipo").value == "") {
+            error = "<label for='error'>Seleccione el tipo de mascota</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        } else if (document.getElementById("sintomas").value.trim() === "") {
+            error = "<label for='error'>Por favor indique los sintomas de su mascota</label><br>";
+            document.getElementById("error").innerHTML = error;
+            quitarError();
+        } else {
+            return true
+        }
+    }
+    //Validacion de la hora
+    function validarHora() {
+        var horaInput = document.getElementById("hora").value;
+        var horaServicioInicio = new Date();
+        horaServicioInicio.setHours(8, 0, 0); // Establecer hora de servicio de inicio a las 8:00 AM
+        var horaServicioFin = new Date();
+        horaServicioFin.setHours(20, 0, 0); // Establecer hora de servicio de fin a las 8:00 PM
+
+        var horaSeleccionada = new Date();
+        var partesHora = horaInput.split(":");
+        horaSeleccionada.setHours(parseInt(partesHora[0], 10), parseInt(partesHora[1], 10), 0);
+
+        if (horaSeleccionada < horaServicioInicio || horaSeleccionada > horaServicioFin) {
+            return false
+        }
+    }
+    //Qutar Eroor
+    function quitarError() {
+        setTimeout(function () {
+            document.getElementById("error").innerHTML = "";
+        }, 1500);
+    }
+    //Limpiar inputd
+    function limpiar() {
+        document.getElementById("mascota").value = "";
+        document.getElementById("propietario").value = "";
+        document.getElementById("telefono").value = "";
+        document.getElementById("fecha").value = "";
+        document.getElementById('hora').value = "";
+        document.getElementById("tipo").value = "";
+        document.getElementById("sintomas").value = ""
+    }
+    //Cerrar el modal
+    function cerrarModal() {
+        let modal = document.getElementById("exampleModal");
+        let bsModal = bootstrap.Modal.getInstance(modal);
+        bsModal.hide();
+    }
+
+    var input = document.getElementById("telefono");
+
+    //Validacion para los numeros (solo 0123456789)
+    input.addEventListener("keypress", function (event) {
+        var keyCode = event.keyCode;
+        if (keyCode < 48 || keyCode > 57) {
+            event.preventDefault();
+        }
+    })
+
+    //Seleccionar solo un checkbox
+    let checkboxes = document.querySelectorAll('.checkbox');
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+                checkboxes.forEach(function (otherCheckbox) {
+                    if (otherCheckbox !== checkbox) {
+                        otherCheckbox.checked = false;
+                    }
+                });
+            }
+        });
+    });
+</script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    /* font-family: 'Bagel Fat One', cursive; */
+    /* font-family: 'Roboto Serif', serif; */
+
+    body {
+        margin-top: 0;
+        margin-bottom: 2px;
+
+        /* align-items: center; */
+    }
+
+    .container-all-all {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .container-all {
+        background-color: rgb(242, 241, 240);
+        flex-direction: column;
+        width: 100%;
+        min-height: 120vh;
+        height: 100%;
+    }
+
+    .barra-izquierda {
+        background-image: url(img/barras.png);
+        background-size: contain;
+        height: auto;
+        width: 10%;
+
+    }
+
+    .barra-derecha {
+        background-image: url(img/barras.png);
+        background-size: contain;
+        /* background-repeat: no-repeat; */
+        height: auto;
+        width: 10%;
+    }
+
+    header {
+        position: relative;
+        top: 0;
+        height: 42vh;
+        width: 100%;
+        background-image: url(img/header-vete.png);
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+        background-position: center center;
+    }
+
+
+    .container {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .titulo {
+        margin-top: 10px;
+        font-size: 50px;
+        font-family: 'Bagel Fat One', cursive;
+
+    }
+
+    .administrar {
+        font-size: 40px;
+        font-family: 'Bagel Fat One', cursive;
+    }
+
+    button {
+        border: 1px solid dodgerblue;
+        background-color: lightblue(225, 229, 235);
+        margin-right: 5px;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    label {
+        margin-right: 30px;
+        margin-top: 14px;
+    }
+
+    .modal-body {
+        display: flex;
+        flex-direction: row;
+    }
+
+    input,
+    select,
+    textarea {
+        margin-right: 10px;
+        margin-top: 10px;
+        /* width: 100%; */
+    }
+
+    #otroInput {
+        width: 80%;
+    }
+
+    .modal-content {
+        border: 1px solid #5CBEC6;
+        -webkit-box-shadow: 5px 6px 5px 0px rgba(92, 190, 198, 0.51);
+        -moz-box-shadow: 5px 6px 5px 0px rgba(92, 190, 198, 0.51);
+        box-shadow: 5px 6px 5px 0px rgba(92, 190, 198, 0.51);
+
+    }
+
+    .modal-title {
+        color: #5CBEC6;
+        text-align: center;
+        margin-left: 25%;
+        font-family: 'Bagel Fat One', cursive;
+    }
+
+
+    .error {
+        color: red;
+        margin-left: 20px;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .espacios {
+        font-weight: 500;
+    }
+
+    .gif {
+        position: absolute;
+        right: 80%;
+    }
+
+    .gif img {
+        height: 100px;
+        width: 100px;
+    }
+
+    .checkboxes {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .checkboxes label {
+        font-size: 20px;
+        font-family: 'Roboto Serif', serif;
+        height: 30px;
+    }
+
+    .container-card {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    .card {
+        position: relative;
+        width: 300px;
+        height: 380px;
+        margin: 20px;
+        background-color: rgb(242, 241, 240);
+
+    }
+
+    .card .face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: .5s;
+    }
+
+    .card .front {
+        transform: perspective(600px) rotateY(0deg);
+        box-shadow: 0 5px 10px #000;
+    }
+
+    .card .front img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .card .front h3 {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 45px;
+        line-height: 45px;
+        color: #fff;
+        background: rgba(0, 0, 0, .4);
+        text-align: center;
+    }
+
+    .card .back {
+        transform: perspective(600px) rotateY(180deg);
+        /* background: rgba(3, 35, 54); */
+        padding: 15px;
+        color: #f3f3f3;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        box-shadow: 0.5px, 10px #000;
+    }
+
+    .bg-success {
+        background-color: green;
+    }
+
+    .bg-danger {
+        background-color: red;
+    }
+
+    .bg-secondary {
+        background-color: grey;
+    }
+
+    .card .back .link {
+        border-top: solid 1px #f3f3f3;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .card .back .link a {
+        color: #f3f3f3;
+    }
+
+    .card .back h3 {
+        font-size: 30px;
+        margin-top: 5px;
+        letter-spacing: 1px;
+    }
+
+    .card .back p {
+        letter-spacing: 1px;
+    }
+
+    .info div {
+        display: flex;
+        justify-content: space-between;
+        /* justify-content: center; */
+        align-items: center;
+
+    }
+
+    .estado {
+        position: relative;
+        top: 3px;
+        width: 100px;
+        height: 38px;
+        margin: 0;
+        border-radius: 10px;
+        border: none;
+        text-align: center;
+        background-color: #f3f5dd;
+        font-size: 17px;
+    }
+
+
+    .negrita {
+        font-weight: 700;
+    }
+
+    .card:hover .front {
+        transform: perspective(600px) rotateY(180deg);
+    }
+
+    .card:hover .back {
+        transform: perspective(600px) rotateY(360deg);
+    }
+
+    footer {
+        background-color: #5CBEC6;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    footer h3 {
+        margin-top: 5px;
+        font-size: 40px;
+        font-family: 'Bagel Fat One', cursive;
+        /* font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
+    }
+
+    .redes-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* align-items: center; */
+
+    }
+
+    .redes-container ul {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        list-style: none;
+        margin-top: 10px;
+    }
+
+
+    .redes-container a {
+        font-size: 30px;
+        margin: 10px;
+    }
+
+    .facebook {
+        color: blue;
+    }
+
+    .whatsapp {
+        color: green;
+    }
+
+    .twitter {
+        color: #f8f8f8;
+    }
+
+    .instagram {
+        color: rgb(242, 89, 18);
+    }
+
+    .phone {
+        color: cornflowerblue;
+    }
+
+    .redes-container a:hover {
+        transform:
+            scale(1.2);
+    }
+
+    @media screen and (min-width : 2000px) {
+        header{
+            height:30vh;
+        }
+    }
+
+    @media screen and (max-width : 1100px) {
+        header{
+            height:30vh;
+        }
+    }
+    @media screen and (max-width : 850px) {
+        header{
+            height:25vh;
+        }
+    }
+
+    @media screen and (max-width : 640px) {
+
+        .titulo {
+            font-size: 40px;
+        }
+
+        .administrar {
+            font-size: 30px;
+        }
+
+        .checkboxes label{
+            font-size: 15px;
+        }
+
+        header {
+            height: 20vh;
+        }
+    }
+    @media screen and (max-width : 400px) {
+        header{
+            height:20vh;
+        }
+    }
+</style>
+
+</html>

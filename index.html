@@ -68,13 +68,13 @@
                 <div id="error" class="error"></div>
                 <div class="modal-body">
                     <div class="espacios">
-                        <label for="mascota">Mascota:</label><br>
+                        <label for="mascota">Nombre Mascota:</label><br>
                         <label for="propietario">Propietario:</label><br>
                         <label for="telefono">Telefono:</label><br>
                         <label for="Fecha">Fecha:</label><br>
                         <label for="hora">Hora:</label><br>
                         <label for="tipo">Tipo:</label><br>
-                        <label for="sintomas" id="sintomasLabel">Sintomas:</label><br>
+                        <label for="sintomas" id="sintomasLabel">Problema:</label><br>
                     </div>
                     <div class="descripcion">
                         <input type="text" id="mascota"><br>
@@ -129,6 +129,7 @@
                 filtrarCitas();
             });
         });
+        filtrarCitas();
     });
 
     //Pintar cards
@@ -136,7 +137,7 @@
         const containerCard = document.getElementById("container-card");
         containerCard.innerHTML = "";
         let fragment = document.createDocumentFragment();
-        data.forEach((d, i) => {
+        data.forEach((d) => {
 
 
             for (let i = 0; i < animals.length; i++) {
@@ -245,7 +246,7 @@
             containerSintomas.id = "container-sintomas"; // Utilizamos el ID correcto
             let sintomas = document.createElement("p");
             sintomas.classList.add("negrita");
-            sintomas.textContent = "Sintomas:";
+            sintomas.textContent = "Problema:";
             let sintomasSelect = document.createElement("p");
             sintomasSelect.id = "sintomasAnimal";
             sintomasSelect.textContent = d.sintomas;
@@ -333,7 +334,7 @@
 
         // Filtrar las citas según el estado seleccionado
         let citasFiltradas = [];
-        if (estadoSeleccionado === "Todas") {
+        if (!estadoSeleccionado || estadoSeleccionado === "Todas") { // Si ningún checkbox está seleccionado o si se selecciona "Todas"
             citasFiltradas = data;
         } else {
             citasFiltradas = data.filter((cita) => cita.estado === estadoSeleccionado);
@@ -451,7 +452,7 @@
             containerSintomas.id = "container-sintomas"; // Utilizamos el ID correcto
             let sintomas = document.createElement("p");
             sintomas.classList.add("negrita");
-            sintomas.textContent = "Sintomas:";
+            sintomas.textContent = "Problema:";
             let sintomasSelect = document.createElement("p");
             sintomasSelect.id = "sintomasAnimal";
             sintomasSelect.textContent = d.sintomas;
@@ -549,34 +550,34 @@
         {
             id: 2,
             mascota: "Michi",
-            propietario: "Gonzalo",
+            propietario: "Pedro",
             telefono: 3222820671,
             fecha: "2023-12-12",
             hora: "12:00",
             tipo: "Gato",
-            sintomas: "No se puede parar",
+            sintomas: "Patita Partida",
             estado: "Anulada"
         },
         {
             id: 3,
-            mascota: "Zzzzz",
-            propietario: "Gonzalo",
+            mascota: "Snak",
+            propietario: "Maria",
             telefono: 3222820671,
             fecha: "2023-12-12",
             hora: "12:00",
             tipo: "Serpiente",
-            sintomas: "No se puede parar",
+            sintomas: "Cortadura",
             estado: "Activo"
         },
         {
             id: 4,
-            mascota: "Pola",
-            propietario: "Gonzalo",
+            mascota: "Piolo",
+            propietario: "Marco",
             telefono: 3222820671,
             fecha: "2023-12-12",
             hora: "12:00",
             tipo: "Canario",
-            sintomas: "No se puede parar",
+            sintomas: "Perdida de plumas",
             estado: "Cerrada"
         },
     ]
@@ -1153,19 +1154,20 @@
     }
 
     @media screen and (min-width : 2000px) {
-        header{
-            height:30vh;
+        header {
+            height: 30vh;
         }
     }
 
     @media screen and (max-width : 1100px) {
-        header{
-            height:30vh;
+        header {
+            height: 30vh;
         }
     }
+
     @media screen and (max-width : 850px) {
-        header{
-            height:25vh;
+        header {
+            height: 25vh;
         }
     }
 
@@ -1179,7 +1181,7 @@
             font-size: 30px;
         }
 
-        .checkboxes label{
+        .checkboxes label {
             font-size: 15px;
         }
 
@@ -1187,9 +1189,10 @@
             height: 20vh;
         }
     }
-    @media screen and (max-width : 400px) {
-        header{
-            height:20vh;
+
+    @media screen and (max-width : 500px) {
+        header {
+            height: 14vh;
         }
     }
 </style>

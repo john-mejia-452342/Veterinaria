@@ -613,7 +613,7 @@
 
     //Agregar datos
     function agregar() {
-
+        bd = 0
         if (document.getElementById("btn-all").textContent !== "Agendar 💾") {
             document.getElementById("btn-all").textContent = "Agendar 💾";
             if (document.getElementById("btn-all").textContent == "Agendar 💾") {
@@ -622,6 +622,7 @@
                 }
             }
         }
+        
         console.log(data);
 
         limpiar();
@@ -631,7 +632,9 @@
         // Cambiar el texto del botón a "Guardar cambios" solo si no ha sido cambiado antes
         if (document.getElementById("btn-all").textContent !== "Guardar cambios 💾") {
             document.getElementById("btn-all").textContent = "Guardar cambios 💾";
-            if (document.getElementById("btn-all").textContent == "Guardar cambios 💾") {
+            
+        }
+        if (document.getElementById("btn-all").textContent == "Guardar cambios 💾") {
                 bd = 1;
                 id = r.id;
                 document.getElementById("mascota").value = r.mascota;
@@ -642,7 +645,6 @@
                 document.getElementById("tipo").value = r.tipo;
                 document.getElementById("sintomas").value = r.sintomas;
             }
-        }
 
     }
     //Guardar datos en data 
@@ -683,6 +685,7 @@
                     estado: "Activo"
                 });
                 console.log(data);
+                
             }
             document.getElementById("btn-all").textContent = "Agendar 💾";
 
